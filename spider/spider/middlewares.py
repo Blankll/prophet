@@ -7,6 +7,10 @@
 
 from scrapy import signals
 from fake_useragent import UserAgent
+from tools.proxy import Proxy
+from scrapy.http import HtmlResponse
+
+proxy = Proxy()
 
 
 class SpiderSpiderMiddleware(object):
@@ -119,5 +123,27 @@ class RandomUserAgentMiddlware(object):
         def get_ua():
             # 获取ua类中的方法,反射
             return getattr(self.ua, self.ua_type)
+
         ua = get_ua()
+        print('user-agent:', ua)
         request.headers.setdefault('User-Agent', ua)
+
+
+class RandomProxyMiddleware(object):
+    # 动态ip代理设置
+    def process_request(self, request, spider):
+        request.meta['proxy'] = proxy.get_random_ip()
+        pass
+
+
+class SeleniumMiddleware(object):
+
+    def process_request(self, request, spider):
+        spider.browser.get(request.url)
+        import time
+        time.sleep(3)
+        print('selenium request: ', request.url)
+        # 请求完成,无需执行下载器
+
+        return HtmlResponse(url=spider.browser.current_url, body=spider.browser.page_source, encoding='utf-8',
+                            request=request)
