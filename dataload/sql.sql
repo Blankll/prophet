@@ -113,3 +113,39 @@ CREATE TABLE `articles` (
     `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT 'enwikis articles table';
+
+CREATE DATABASE IF NOT EXISTS `reddit` DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_general_ci;
+use reddit;
+
+GRANT ALL ON reddit.* TO 'prophet'@'%';
+FLUSH PRIVILEGES;
+
+USE reddit;
+
+CREATE TABLE `comments` (
+    `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'id',
+    `id_str` CHAR(10) NOT NULL UNIQUE,
+    `parent_id` CHAR(10),
+    `subreddit_id` CHAR(10),
+    `link_id` CHAR(10),
+    `author` VARCHAR(100),
+    `name` CHAR(60) UNIQUE,
+    `ups` INT,
+    `score` INT,
+    `downs` INT,
+    `gilded` INT,
+    `retrieved_on` INT,
+    `controversiality` INT,
+    `body` LONGTEXT,
+    `distinguished` VARCHAR(100),
+    `subreddit`  VARCHAR(200),
+    `removal_reason` VARCHAR(200),
+    `author_flair_text` VARCHAR(200),
+    `author_flair_css_class` VARCHAR(200),
+    `archived` TINYINT UNSIGNED COMMENT 'TURE 1, FALSE 0',
+    `edited` TINYINT UNSIGNED COMMENT 'TURE 1, FALSE 0',
+    `score_hidden` TINYINT UNSIGNED COMMENT 'TURE 1, FALSE 0',
+    `created_utc` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT 'reddit comments table';

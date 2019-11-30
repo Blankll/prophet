@@ -17,14 +17,11 @@ public class Config {
     public static Hashtable<String, String> config = new Hashtable<>();
 
     private Config() {
-        String configPath = this.getClass().getClassLoader().getResource("app.properties").getPath();
+        InputStream configStream = this.getClass().getClassLoader().getResourceAsStream("app.properties");
         Properties properties = new Properties();
         config.put("root", System.getProperty("user.dir"));
-        config.put("app.properties", configPath);
-        InputStream appStream = null;
         try {
-            appStream = new FileInputStream(configPath);
-            properties.load(appStream);
+            properties.load(configStream);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.err.println("file not exists");

@@ -2,3 +2,5 @@
 /target/*
 resources/
 /data-load-java.iml
+/classes/
+/src/META-INF/
